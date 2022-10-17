@@ -1,0 +1,26 @@
+#we need column count to drop some exceeding columns 
+column_count = len(df.columns)
+fourth_last = column_count - 5
+#we will leave first 5 and last five columns
+columns_to_drop = df.iloc[0:1, 6:fourth_last].columns
+new_dataframe = df.drop(labels=columns_to_drop, axis=1)
+#insert dot column to emphasize, that original datasets had more column
+new_dataframe["..."] = "..."
+#now let's put the dot column in the middle
+cols = list(new_dataframe.columns)
+middle = len(cols) // 2
+print(cols[-1])
+print(cols)
+cols = cols[:middle] + cols[-1:] + cols[middle:-1]
+print(cols)
+new_dataframe = new_dataframe[cols]
+table_fig = go.Figure(data=[go.Table(
+    header=dict(values=list(new_dataframe.columns),
+                fill_color='paleturquoise',
+                align='left'),
+    cells=dict(values=[new_dataframe[c] for c in new_dataframe.columns],
+               fill_color='lavender',
+               align='left'))
+])
+
+table_fig.show()
